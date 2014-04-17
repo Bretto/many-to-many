@@ -1,0 +1,54 @@
+{
+    "data": [
+        {
+            "id": "1",
+            "power_id": "1",
+            "hero_id": "a"
+        },
+        {
+            "id": "2",
+            "power_id": "1",
+            "hero_id": "b"
+        },
+        {
+            "id": "3",
+            "power_id": "2",
+            "hero_id": "c"
+        },
+        {
+            "id": "4",
+            "power_id": "2",
+            "hero_id": "d"
+        },
+        {
+            "id": "5",
+            "power_id": "3",
+            "hero_id": "e"
+        },
+        {
+            "id": "6",
+            "power_id": "4",
+            "hero_id": "f"
+        },
+        {
+            "id": "7",
+            "power_id": "5",
+            "hero_id": "g"
+        },
+        {
+            "id": "8",
+            "power_id": "1",
+            "hero_id": "h"
+        },
+        {
+            "id": "9",
+            "power_id": "2",
+            "hero_id": "i"
+        },
+        {
+            "id": "10",
+            "power_id": "3",
+            "hero_id": "j"
+        }
+    ]
+}

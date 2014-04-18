@@ -6,6 +6,16 @@
             "hero_id": "a"
         },
         {
+            "id": "11",
+            "power_id": "2",
+            "hero_id": "a"
+        },
+        {
+            "id": "12",
+            "power_id": "5",
+            "hero_id": "a"
+        },
+        {
             "id": "2",
             "power_id": "1",
             "hero_id": "b"
@@ -27,7 +37,7 @@
         },
         {
             "id": "6",
-            "power_id": "4",
+            "power_id": "3",
             "hero_id": "f"
         },
         {

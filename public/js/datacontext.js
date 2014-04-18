@@ -25,13 +25,13 @@
                 switch (parseContext.query.resourceName) {
                     case "/assets/json/hero.json":
                         entityType = { entityType: "Hero"  }
-                        if(nodeContext.propertyName === "data")return entityType;
+                        if (nodeContext.propertyName === "data")return entityType;
                     case "/assets/json/hero-power-map.json":
                         entityType = { entityType: "HeroPowerMap"  }
-                        if(nodeContext.propertyName === "data")return entityType;
+                        if (nodeContext.propertyName === "data")return entityType;
                     case "/assets/json/power.json":
                         entityType = { entityType: "Power"  }
-                        if(nodeContext.propertyName === "data")return entityType;
+                        if (nodeContext.propertyName === "data")return entityType;
                 }
 
             }
@@ -39,7 +39,7 @@
         });
     });
 
-    services.factory('DataContext', function (EntityModel, jsonResultsAdapter, $log, ngBreeze, ngQ, $location) {
+    services.factory('DataContext', function (EntityModel, jsonResultsAdapter, $log, ngBreeze, ngQ, $location, $timeout) {
 
         ngBreeze.config.initializeAdapterInstance("modelLibrary", "backingStore", true);
 
@@ -56,6 +56,26 @@
 
         EntityModel.initialize(manager.metadataStore);
 
+        function newHero() {
+            var newEntity = manager.createEntity('Hero', {name: 'name'});
+            manager.addEntity(newEntity);
+            newEntity.entityAspect.acceptChanges();
+
+            return newEntity;
+        }
+
+        function deleteHero(entity) {
+
+            var done = false;
+            while (!done) {
+                entity.powerMaps[0].entityAspect.setDeleted();
+                if (entity.powerMaps.length === 0)done = true;
+            }
+
+            entity.entityAspect.setDeleted();
+
+            return entity;
+        }
 
         function getAllHero() {
 
@@ -100,6 +120,8 @@
 
         return {
             getAllHero: getAllHero,
+            newHero: newHero,
+            deleteHero: deleteHero,
             getAllPower: getAllPower,
             getAllHeroPowerMap: getAllHeroPowerMap,
             manager: manager

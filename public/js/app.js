@@ -1,6 +1,6 @@
 (function () {
     "use strict";
-
+    var forEach = angular.forEach;
 
     var module = angular.module('App', [
         'xeditable',
@@ -30,6 +30,40 @@
 
     })());
 
+
+    module.directive('setect2Tag', function ($parse) {
+
+        function link(scope, elem, attrs) {
+            var data = [];
+
+            elem.select2({
+                data: function () {
+                    return {results: data};
+                },
+                multiple: true
+            });
+
+            elem.on('select2-opening', function () {
+                var powers = $parse(attrs['setect2Tag'])(scope);;
+                if (powers) {
+
+                    var formatData = powers.map(function (power) {
+                        return {id: power.id, text: power.name}
+                    })
+
+                    data = formatData;
+                }
+            })
+
+        }
+
+        return {
+            restrict: 'A',
+            link: link
+        };
+    });
+
+
     module.controller('AppCtrl', function ($scope, DataContext, $timeout, $rootScope) {
         console.log('AppCtrl');
 
@@ -53,6 +87,8 @@
                 console.log(error);
             });
 
+        $scope.myPowerList = {tags: ["red", "green", "blue"]};
+
         DataContext.getAllHero()
             .then(function (res) {
                 console.log(res.results[0].data);
@@ -75,9 +111,14 @@
             DataContext.manager.acceptChanges();
         }
 
+        $scope.onNewPower = function () {
+            var newPower = DataContext.newPower();
+            $scope.powers.unshift(newPower);
+        }
+
         $scope.onDeletePower = function (index) {
-            var deletedEntity = DataContext.deleteHero($scope.heros[index]);
-            $scope.heros.splice(index, 1);
+            var deletedEntity = DataContext.deletePower($scope.powers[index]);
+            $scope.powers.splice(index, 1);
             DataContext.manager.acceptChanges();
         }
 

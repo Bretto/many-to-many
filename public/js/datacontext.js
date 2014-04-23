@@ -66,16 +66,36 @@
 
         function deleteHero(entity) {
 
-            var done = false;
-            while (!done) {
-                entity.powerMaps[0].entityAspect.setDeleted();
-                if (entity.powerMaps.length === 0)done = true;
-            }
+            if (entity.powerMaps[0]) {
 
-            entity.entityAspect.setDeleted();
+                var done = false;
+                while (!done) {
+                    entity.powerMaps[0].entityAspect.setDeleted();
+                    if (entity.powerMaps.length === 0)done = true;
+                }
+
+                entity.entityAspect.setDeleted();
+            }
 
             return entity;
         }
+
+        function deletePower(entity) {
+
+            if (entity.heroMaps[0]) {
+                var done = false;
+                while (!done) {
+
+                    entity.heroMaps[0].entityAspect.setDeleted();
+                    if (entity.heroMaps.length === 0)done = true;
+                }
+
+                entity.entityAspect.setDeleted();
+            }
+
+            return entity;
+        }
+
 
         function getAllHero() {
 
@@ -117,12 +137,22 @@
 
         }
 
+        function newPower() {
+            var newEntity = manager.createEntity('Power', {name: 'name'});
+            manager.addEntity(newEntity);
+            newEntity.entityAspect.acceptChanges();
+
+            return newEntity;
+        }
+
 
         return {
             getAllHero: getAllHero,
             newHero: newHero,
             deleteHero: deleteHero,
             getAllPower: getAllPower,
+            newPower: newPower,
+            deletePower: deletePower,
             getAllHeroPowerMap: getAllHeroPowerMap,
             manager: manager
         };

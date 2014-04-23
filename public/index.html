@@ -4,16 +4,34 @@
     <title></title>
     <link rel='stylesheet' href='js/libs/bootstrap/css/bootstrap.css'/>
     <link rel='stylesheet' href='stylesheets/xeditable.css'/>
+    <link rel='stylesheet' href='stylesheets/select2.css'/>
     <link rel='stylesheet' href='stylesheets/font-awesome.min.css'/>
     <link rel='stylesheet' href="stylesheets/screen.css"/>
 </head>
 <body data-ng-controller="AppCtrl" class="container">
+
+
+
+
 <section class="col-sm-6">
+
+    <div class="well">
+        <input class="tag-wrap" type="hidden" setect2-tag="powers">
+    </div>
+
     <button ng-click="onNewHero()" class="btn btn-primary">+</button>
     <ul class="hero-wrap">
         <li class="hero card" data-ng-repeat="hero in heros">
             <button class="pull-right btn btn-danger" ng-click="onDeleteHero($index)">-</button>
             <h4 editable-text="hero.name">{{hero.name}}</h4>
+
+
+
+            <!--<select class="col-sm-12" ui-select2 ng-model="powerSelected" data-placeholder="Pick a power">-->
+            <!--<option value=""></option>-->
+            <!--<option ng-repeat="power in powers" value="{{power.name}}">{{power.name}}</option>-->
+            <!--</select>-->
+
             <ul>
                 <li class="power" data-ng-repeat="heroPowerMap in hero.powerMaps">
                     <h5 editable-text="heroPowerMap.power.name">{{heroPowerMap.power.name}}</h5>
@@ -24,8 +42,10 @@
 </section>
 
 <section class="col-sm-6">
+    <button ng-click="onNewPower()" class="btn btn-primary">+</button>
     <ul class="power-wrap">
         <li class="power card" data-ng-repeat="power in powers">
+            <button class="pull-right btn btn-danger" ng-click="onDeletePower($index)">-</button>
             <h4 editable-text="power.name">{{power.name || 'Power'}}</h4>
             <ul>
                 <li class="hero" data-ng-repeat="heroPowerMap in power.heroMaps">
@@ -42,6 +62,8 @@
 <script src="js/libs/breeze.debug.js"></script>
 <script src="js/libs/angular.min.js"></script>
 <script src="js/libs/xeditable.js"></script>
+<script src="js/libs/select2.min.js"></script>
+<!--<script src="js/libs/angular-select2.js"></script>-->
 <script src="js/app.js"></script>
 <script src="js/entity-model.js"></script>
 <script src="js/datacontext.js"></script>

@@ -145,6 +145,14 @@
             return newEntity;
         }
 
+        function newHeroPowerMap(heroId, powerId) {
+            var newEntity = manager.createEntity('HeroPowerMap', { hero_id: heroId, power_id: powerId});
+            manager.addEntity(newEntity);
+            newEntity.entityAspect.acceptChanges();
+
+            return newEntity;
+        }
+
 
         return {
             getAllHero: getAllHero,
@@ -154,6 +162,7 @@
             newPower: newPower,
             deletePower: deletePower,
             getAllHeroPowerMap: getAllHeroPowerMap,
+            newHeroPowerMap: newHeroPowerMap,
             manager: manager
         };
 

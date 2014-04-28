@@ -16,22 +16,15 @@
 <section class="col-sm-6">
 
     <div class="well">
-        <input class="tag-wrap" type="hidden" setect2-tag="powers">
+        <input class="tag-wrap" type="hidden" setect2-tags="{data:powers, result:search}" >
     </div>
 
     <button ng-click="onNewHero()" class="btn btn-primary">+</button>
     <ul class="hero-wrap">
-        <li class="hero card" data-ng-repeat="hero in heros">
+        <li class="hero card" data-ng-repeat="hero in heros" ng-controller="HeroCtrl">
             <button class="pull-right btn btn-danger" ng-click="onDeleteHero($index)">-</button>
             <h4 editable-text="hero.name">{{hero.name}}</h4>
-
-
-
-            <!--<select class="col-sm-12" ui-select2 ng-model="powerSelected" data-placeholder="Pick a power">-->
-            <!--<option value=""></option>-->
-            <!--<option ng-repeat="power in powers" value="{{power.name}}">{{power.name}}</option>-->
-            <!--</select>-->
-
+            <input class="tag-wrap" type="hidden" setect2-dropdown="{data:powers, action:onPowerSelect}" >
             <ul>
                 <li class="power" data-ng-repeat="heroPowerMap in hero.powerMaps">
                     <h5 editable-text="heroPowerMap.power.name">{{heroPowerMap.power.name}}</h5>

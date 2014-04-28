@@ -7,7 +7,7 @@
         'App.DataContext',
         'App.EntityModel'
     ]).run(function (editableOptions) {
-        editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+        editableOptions.theme = 'bs3';
     });
 
     module.value('ngBreeze', (function () {
@@ -31,10 +31,11 @@
     })());
 
 
-    module.directive('setect2Tag', function ($parse) {
+    module.directive('setect2Tags', function ($parse) {
 
         function link(scope, elem, attrs) {
             var data = [];
+            var options;
 
             elem.select2({
                 data: function () {
@@ -44,7 +45,8 @@
             });
 
             elem.on('select2-opening', function () {
-                var powers = $parse(attrs['setect2Tag'])(scope);;
+                options = $parse(attrs['setect2Tags'])(scope);
+                var powers = options.data;
                 if (powers) {
 
                     var formatData = powers.map(function (power) {
@@ -53,7 +55,73 @@
 
                     data = formatData;
                 }
-            })
+            });
+
+
+            elem.on('change', function (e) {
+                options.result.length = 0;
+                angular.forEach(e.val, function (elem) {
+                    options.result.push(elem);
+                });
+                scope.$digest();
+            });
+        }
+
+        return {
+            restrict: 'A',
+            link: link
+        };
+    });
+
+    module.directive('setect2Dropdown', function ($parse) {
+
+        function hasPower(powerId, powerMaps) {
+            var has = false;
+
+            angular.forEach(powerMaps, function (powerMap) {
+                if (powerMap.power.id === powerId) {
+                    has = true;
+                }
+            });
+
+            return has;
+        }
+
+
+        function link(scope, elem, attrs) {
+            var data = [];
+            var options;
+
+            elem.select2({
+                data: function () {
+                    return {results: data};
+                },
+                multiple: false,
+                allowClear: true,
+                placeholder: 'Select Power'
+            });
+
+            elem.on('select2-opening', function () {
+                options = $parse(attrs['setect2Dropdown'])(scope);
+                var powers = options.data;
+                var powerMaps = scope.hero.powerMaps;
+                if (powers) {
+
+                    var formatData = powers.map(function (power) {
+                        return {id: power.id, text: power.name, disabled: hasPower(power.id, powerMaps)}
+                    })
+
+                    data = formatData;
+                }
+            });
+
+
+            elem.on('change', function (e) {
+                if(e.val){
+                    options.action(e);
+                }
+
+            });
 
         }
 
@@ -64,8 +132,28 @@
     });
 
 
-    module.controller('AppCtrl', function ($scope, DataContext, $timeout, $rootScope) {
+    module.controller('AppCtrl', function ($scope, DataContext, $timeout, $rootScope, ngBreeze) {
         console.log('AppCtrl');
+
+
+        $scope.search = [];
+
+        $scope.$watchCollection(function () {
+            return $scope.search
+        }, function (val) {
+
+            var listofSuperPowers = val;
+            var preds = listofSuperPowers.map(function (sp) {
+                return ngBreeze.Predicate.create("powerMaps", "any", "power.id", "==", sp);
+            });
+
+            var whereClause = ngBreeze.Predicate.and(preds);
+            var query = ngBreeze.EntityQuery.from('Hero').where(whereClause)
+
+            var heros = DataContext.manager.executeQueryLocally(query);
+            $scope.heros = heros;
+
+        })
 
 
         DataContext.getAllHeroPowerMap()
@@ -87,7 +175,6 @@
                 console.log(error);
             });
 
-        $scope.myPowerList = {tags: ["red", "green", "blue"]};
 
         DataContext.getAllHero()
             .then(function (res) {
@@ -122,6 +209,15 @@
             DataContext.manager.acceptChanges();
         }
 
+
+    });
+
+    module.controller('HeroCtrl', function ($scope, DataContext, $timeout, $rootScope, ngBreeze) {
+
+        $scope.onPowerSelect = function (heroPowerMap) {
+            DataContext.newHeroPowerMap($scope.hero.id, heroPowerMap.val);
+            $scope.$digest();
+        }
 
     });
 
